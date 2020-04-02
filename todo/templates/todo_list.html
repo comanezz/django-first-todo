@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Things I need to do...</h1>
+
+    <table>
+        {% for item in items %}
+        <tr>
+            <!-- This code means if boolean in item.done is equal to true then show the name with the strike -->
+            {% if item.done %}
+            <td><strike>{{ item.name }}</strike></td>
+            {% else %}
+            <td>{{ item.name }}</td>
+            {% endif %}
+
+            <td>
+                <form action="toggle/{{ item.id }}" method="POST">
+                    {% csrf_token %}
+                    <input type="submit" value="Toggle">
+                </form>
+            </td>
+
+            <td>
+                <!-- we'll give it a method of GET we'll also give it an action of edit. So this
+                    will tell us that we want to get something from a URL called edit -->
+                <form action="edit/{{ item.id }}" method="GET">
+                    <input type="submit" value="Edit">
+                </form>
+            </td>
+        </tr>
+        <!-- This code means if there is no data show this -->
+        {% empty %}
+        <p>You have nothing to do.</p>
+        {% endfor %}
+    </table>
+
+    <a href="add">Add an item</a>
+</body>
+
+</html>
