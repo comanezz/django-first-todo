@@ -29,7 +29,7 @@ DEBUG = True
 """Could be this but it is better to use environment variable in heroku
 """
 # ALLOWED_HOSTS = ['simple-django-first-todo.herokuapp.com']
-ALLOWED_HOSTS = [os.environ.get('HOSTNAME')]
+ALLOWED_HOSTS = [os.environ.get('HOSTNAME')] 
 
 # Application definition
 
