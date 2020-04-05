@@ -13,6 +13,15 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import dj_database_url
 
+from os import path
+if path.exists("env.py"):
+    import env
+
+if os.environ.get('DEVELOPMENT'):
+    development = True
+else:
+    development = False
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -21,10 +30,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'lc(_0swa5%f$%_1i8+^t(4lg_di90$6dfx=!1j$#vfl%1v_kvg'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = development
 
 """Could be this but it is better to use environment variable in heroku
 """
@@ -77,19 +86,20 @@ WSGI_APPLICATION = 'django_todo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# Used this database for sqlite3
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-# Using database from heroku
-"""Could be this but it is better to use environment variable in heroku
-"""
-# DATABASES = {'default': dj_database_url.parse("postgres://wsudjdudwuevzj:49b5fafecfefff1bfee8e803c87376555d61717dfefc1d727d0dd68530ebc4ae@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/d36f2ns7i0fnrd")}
-DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
+if development:
+    # Used this database for sqlite3
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+    # Using database from heroku
+    """Could be this but it is better to use environment variable in heroku
+    """
+    # DATABASES = {'default': dj_database_url.parse("postgres://wsudjdudwuevzj:49b5fafecfefff1bfee8e803c87376555d61717dfefc1d727d0dd68530ebc4ae@ec2-46-137-177-160.eu-west-1.compute.amazonaws.com:5432/d36f2ns7i0fnrd")}
+    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
 
 
 # Password validation
